@@ -1,0 +1,14 @@
+[Unit]
+Description=Janus WebRTC Server
+Documentation=https://janus.conf.meetecho.com/
+After=network.target
+
+[Service]
+Type=forking
+User=janus
+ExecStart=/usr/bin/janus -ob
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
