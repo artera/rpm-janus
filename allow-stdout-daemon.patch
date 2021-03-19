@@ -1,0 +1,19 @@
+diff --git a/janus.c b/janus.c
+index db1ca896..4a3e900e 100644
+--- a/janus.c
++++ b/janus.c
+@@ -4101,14 +4101,6 @@ gint main(int argc, char *argv[])
+ 		if(item && item->value && janus_is_true(item->value))
+ 			daemonize = TRUE;
+ 	}
+-	/* If we're going to daemonize, make sure logging to stdout is disabled and a log file has been specified */
+-	if(daemonize && use_stdout) {
+-		use_stdout = FALSE;
+-	}
+-	if(daemonize && logfile == NULL) {
+-		g_print("Running Janus as a daemon but no log file provided, giving up...\n");
+-		exit(1);
+-	}
+ 	/* Daemonize now, if we need to */
+ 	if(daemonize) {
+ 		g_print("Running Janus as a daemon\n");

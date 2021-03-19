@@ -9,6 +9,7 @@ URL:           https://janus.conf.meetecho.com/
 Source0:       https://github.com/meetecho/janus-gateway/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:       janus.user
 Source2:       janus.service
+Patch0:        allow-stdout-daemon.patch
 BuildRequires: make
 BuildRequires: systemd-rpm-macros
 BuildRequires: libmicrohttpd-devel
@@ -37,7 +38,7 @@ Janus is an open source, general purpose, WebRTC server designed and
 developed by Meetecho.
 
 %prep
-%autosetup -n janus-gateway-%{version}
+%autosetup -n janus-gateway-%{version} -p1
 autoreconf -fiv
 %configure
 %make_build
