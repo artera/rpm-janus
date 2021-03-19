@@ -24,6 +24,10 @@ BuildRequires: pkgconfig
 BuildRequires: gengetopt
 BuildRequires: libconfig-devel
 BuildRequires: libnice-devel
+BuildRequires: libwebsockets-devel
+BuildRequires: librabbitmq-devel
+BuildRequires: libpcap-devel
+BuildRequires: npm
 BuildRequires: libtool
 BuildRequires: autoconf
 BuildRequires: automake
