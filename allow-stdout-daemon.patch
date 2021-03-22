@@ -1,5 +1,18 @@
+diff --git a/janus-cfgconv.c b/janus-cfgconv.c
+index b588f560..04874fea 100644
+--- a/janus-cfgconv.c
++++ b/janus-cfgconv.c
+@@ -40,7 +40,7 @@ int lock_debug = 0;
+ /* Main Code */
+ int main(int argc, char *argv[])
+ {
+-	janus_log_init(FALSE, TRUE, NULL);
++	janus_log_init(TRUE, NULL);
+ 	atexit(janus_log_destroy);
+ 
+ 	JANUS_LOG(LOG_INFO, "Janus version: %d (%s)\n", janus_version, janus_version_string);
 diff --git a/janus.c b/janus.c
-index db1ca896..4a3e900e 100644
+index db1ca896..c3b550c8 100644
 --- a/janus.c
 +++ b/janus.c
 @@ -4101,14 +4101,6 @@ gint main(int argc, char *argv[])
@@ -17,3 +30,103 @@ index db1ca896..4a3e900e 100644
  	/* Daemonize now, if we need to */
  	if(daemonize) {
  		g_print("Running Janus as a daemon\n");
+@@ -4185,7 +4177,7 @@ gint main(int argc, char *argv[])
+ 	}
+ 
+ 	/* Initialize logger */
+-	if(janus_log_init(daemonize, use_stdout, logfile) < 0)
++	if(janus_log_init(use_stdout, logfile) < 0)
+ 		exit(1);
+ 	/* Check if there are external loggers we need to load as well */
+ 	const char *path = NULL;
+diff --git a/log.c b/log.c
+index f6062d14..dce73d8a 100644
+--- a/log.c
++++ b/log.c
+@@ -215,7 +215,7 @@ void janus_vprintf(const char *format, ...) {
+ 	g_mutex_unlock(&lock);
+ }
+ 
+-int janus_log_init(gboolean daemon, gboolean console, const char *logfile) {
++int janus_log_init(gboolean console, const char *logfile) {
+ 	if (!g_atomic_int_compare_and_exchange(&initialized, 0, 1)) {
+ 		return 0;
+ 	}
+@@ -239,21 +239,6 @@ int janus_log_init(gboolean daemon, gboolean console, const char *logfile) {
+ 		g_print("WARNING: logging completely disabled!\n");
+ 		g_print("         (no stdout and no logfile, this may not be what you want...)\n");
+ 	}
+-	if(daemon) {
+-		/* Replace the standard file descriptors */
+-		if (freopen("/dev/null", "r", stdin) == NULL) {
+-			g_print("Error replacing stdin with /dev/null\n");
+-			return -1;
+-		}
+-		if (freopen("/dev/null", "w", stdout) == NULL) {
+-			g_print("Error replacing stdout with /dev/null\n");
+-			return -1;
+-		}
+-		if (freopen("/dev/null", "w", stderr) == NULL) {
+-			g_print("Error replacing stderr with /dev/null\n");
+-			return -1;
+-		}
+-	}
+ 	printthread = g_thread_new(THREAD_NAME, &janus_log_thread, NULL);
+ 	return 0;
+ }
+diff --git a/log.h b/log.h
+index 58b8a7ab..4816e5ad 100644
+--- a/log.h
++++ b/log.h
+@@ -27,11 +27,10 @@ void janus_vprintf(const char *format, ...) G_GNUC_PRINTF(1, 2);
+ /*! \brief Log initialization
+ * \note This should be called before attempting to use the logger. A buffer
+ * pool and processing thread are created.
+-* @param daemon Whether the Janus is running as a daemon or not
+ * @param console Whether the output should be printed on stdout or not
+ * @param logfile Log file to save the output to, if any
+ * @returns 0 in case of success, a negative integer otherwise */
+-int janus_log_init(gboolean daemon, gboolean console, const char *logfile);
++int janus_log_init(gboolean console, const char *logfile);
+ /*! \brief Method to add a list of external loggers to the log management
+  * @param loggers Hash table of external loggers registered in the core */
+ void janus_log_set_loggers(GHashTable *loggers);
+diff --git a/postprocessing/janus-pp-rec.c b/postprocessing/janus-pp-rec.c
+index b2c36887..590679fc 100644
+--- a/postprocessing/janus-pp-rec.c
++++ b/postprocessing/janus-pp-rec.c
+@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
+ 	if(cmdline_parser(argc, argv, &args_info) != 0)
+ 		exit(1);
+ 
+-	janus_log_init(FALSE, TRUE, NULL);
++	janus_log_init(TRUE, NULL);
+ 	atexit(janus_log_destroy);
+ 
+ 	/* If we're asked to print the JSON header as it is, we must not print anything else */
+diff --git a/postprocessing/mjr2pcap.c b/postprocessing/mjr2pcap.c
+index 3b5997fe..601a363f 100644
+--- a/postprocessing/mjr2pcap.c
++++ b/postprocessing/mjr2pcap.c
+@@ -150,7 +150,7 @@ static void janus_pp_handle_signal(int signum) {
+ /* Main Code */
+ int main(int argc, char *argv[])
+ {
+-	janus_log_init(FALSE, TRUE, NULL);
++	janus_log_init(TRUE, NULL);
+ 	atexit(janus_log_destroy);
+ 
+ 	/* Evaluate arguments */
+diff --git a/postprocessing/pcap2mjr.c b/postprocessing/pcap2mjr.c
+index 0e7362c7..a4d1d886 100644
+--- a/postprocessing/pcap2mjr.c
++++ b/postprocessing/pcap2mjr.c
+@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
+ 	if(cmdline_parser(argc, argv, &args_info) != 0)
+ 		exit(1);
+ 
+-	janus_log_init(FALSE, TRUE, NULL);
++	janus_log_init(TRUE, NULL);
+ 	atexit(janus_log_destroy);
+ 
+ 	/* Evaluate arguments to find source and target */

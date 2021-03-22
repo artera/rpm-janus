@@ -28,6 +28,7 @@ BuildRequires: libnice-devel
 BuildRequires: libwebsockets-devel
 BuildRequires: librabbitmq-devel
 BuildRequires: libpcap-devel
+BuildRequires: usrsctp-devel
 BuildRequires: npm
 BuildRequires: libtool
 BuildRequires: autoconf
