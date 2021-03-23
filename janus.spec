@@ -2,7 +2,7 @@
 
 Name:          janus
 Version:       0.10.10
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Janus WebRTC Server
 License:       GPLv3
 URL:           https://janus.conf.meetecho.com/
