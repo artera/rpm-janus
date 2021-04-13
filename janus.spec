@@ -1,15 +1,14 @@
 %define _sysusersdir %{_prefix}/lib/sysusers.d
 
 Name:          janus
-Version:       0.10.10
-Release:       3%{?dist}
+Version:       0.11.1
+Release:       1%{?dist}
 Summary:       Janus WebRTC Server
 License:       GPLv3
 URL:           https://janus.conf.meetecho.com/
 Source0:       https://github.com/meetecho/janus-gateway/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:       janus.user
 Source2:       janus.service
-Patch0:        allow-stdout-daemon.patch
 BuildRequires: make
 BuildRequires: systemd-rpm-macros
 BuildRequires: libmicrohttpd-devel
