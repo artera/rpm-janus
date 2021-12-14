@@ -1,7 +1,7 @@
 %define _sysusersdir %{_prefix}/lib/sysusers.d
 
 Name:          janus
-Version:       0.11.5
+Version:       0.11.6
 Release:       1%{?dist}
 Summary:       Janus WebRTC Server
 License:       GPLv3
